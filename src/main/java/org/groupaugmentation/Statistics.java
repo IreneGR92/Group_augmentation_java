@@ -2,6 +2,7 @@ package org.groupaugmentation;
 
 import ch.qos.logback.classic.Logger;
 import lombok.extern.slf4j.Slf4j;
+import org.decimal4j.util.DoubleRounder;
 import org.groupaugmentation.model.DataModel;
 import org.groupaugmentation.model.types.GeneType;
 import org.groupaugmentation.model.types.PhenoTypes;
@@ -98,33 +99,36 @@ public final class Statistics {
                 + dataModel.getGroupSize().getSum() + TAB
                 + dataModel.getDeaths() + TAB
                 + dataModel.getFloatersGenerated() + TAB
-                + dataModel.getGroupSize().getMean() + TAB
-                + dataModel.getAgeStats().getMean() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.ALPHA).getMean() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE).getMean() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE2).getMean() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.BETA).getMean() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.BETA_AGE).getMean() + TAB
-                + dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getMean() + TAB
-                + dataModel.getCumulativeHelp().getMean() + TAB
-                + dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getMean() + TAB
-                + dataModel.getPhenotypeAttributes().get(PhenoTypes.SURVIVAL).getMean() + TAB
-                + dataModel.getRelatedness() + TAB
-                + dataModel.getGroupSize().getStandardDeviation() + TAB
-                + dataModel.getAgeStats().getStandardDeviation() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.ALPHA).getStandardDeviation() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE).getStandardDeviation() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE2).getStandardDeviation() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.BETA).getStandardDeviation() + TAB
-                + dataModel.getGeneAttributes().get(GeneType.BETA_AGE).getStandardDeviation() + TAB
-                + dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getStandardDeviation() + TAB
-                + dataModel.getCumulativeHelp().getStandardDeviation() + TAB
-                + dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getStandardDeviation() + TAB
-                + dataModel.getPhenotypeAttributes().get(PhenoTypes.SURVIVAL).getStandardDeviation() + TAB
-                + Statistics.getCorrelation(dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getProductSum(),
-                dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getMean(),
-                dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getMean(),
-                dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getSumCounter()) + TAB
+                + formatDouble(dataModel.getGroupSize().getMean()) + TAB
+                + formatDouble(dataModel.getAgeStats().getMean()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.ALPHA).getMean()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE).getMean()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE2).getMean()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.BETA).getMean()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.BETA_AGE).getMean()) + TAB
+                + formatDouble(dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getMean()) + TAB
+                + formatDouble(dataModel.getCumulativeHelp().getMean()) + TAB
+                + formatDouble(dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getMean()) + TAB
+                + formatDouble(dataModel.getPhenotypeAttributes().get(PhenoTypes.SURVIVAL).getMean()) + TAB
+                + formatDouble(dataModel.getRelatedness()) + TAB
+                + formatDouble(dataModel.getGroupSize().getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getAgeStats().getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.ALPHA).getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE).getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE2).getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.BETA).getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getGeneAttributes().get(GeneType.BETA_AGE).getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getCumulativeHelp().getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getStandardDeviation()) + TAB
+                + formatDouble(dataModel.getPhenotypeAttributes().get(PhenoTypes.SURVIVAL).getStandardDeviation()) + TAB
+
+                + formatDouble(
+                Statistics.getCorrelation(dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getProductSum(),
+                        dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getMean(),
+                        dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getMean(),
+                        dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getSumCounter())
+        ) + TAB
                 + 0 + TAB //TODO implement correlation between groupsize and cumulative help
                 + dataModel.getNewBreederFloater() + TAB
                 + dataModel.getNewBreederHelper() + TAB
@@ -137,5 +141,9 @@ public final class Statistics {
     }
 
 
+    private String formatDouble(double toFormat) {
+        final int precision = 4;
+        return String.format("%.0" + precision + "f", DoubleRounder.round(toFormat, precision));
+    }
 }
 
