@@ -12,12 +12,10 @@ class StatisticalSumTest {
     void mergeTest() {
         //given
         StatisticalSum toMerge = new StatisticalSum();
-        toMerge.addToSum(2);
-        toMerge.addToSumOfSquare(1);
+        toMerge.addSum(2);
 
         StatisticalSum toMergeWith = new StatisticalSum();
-        toMergeWith.addToSum(4);
-        toMergeWith.addToSumOfSquare(2);
+        toMergeWith.addSum(4);
 
         //when
         toMerge.merge(toMergeWith);
@@ -42,8 +40,8 @@ class StatisticalSumTest {
         //given
         StatisticalSum instanceToTest = new StatisticalSum();
         //when
-        instanceToTest.addToSum(2);
-        instanceToTest.addToSum(3);
+        instanceToTest.addSum(2);
+        instanceToTest.addSum(3);
         //then
         assertNotNull(instanceToTest);
         assertEquals(5, instanceToTest.getSum());

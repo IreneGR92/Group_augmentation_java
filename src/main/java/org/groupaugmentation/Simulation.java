@@ -18,22 +18,13 @@ public class Simulation {
 
     private final Statistics statistics;
 
+
     private final RandomNumberGenerator randomNumberGenerator;
 
-    @Getter
-    private int generation = 0;
-
-    @Getter
-    private int deaths = 0;
-
-    @Getter
-    private int populationSize = 0;
 
     @Getter
     private int populationSizeBeforeSurvival = 0;
 
-    @Getter
-    private int floatersGenerated = 0;
 
     @Getter
     private int newBreederFloater = 0;
@@ -61,8 +52,8 @@ public class Simulation {
         statistics.printHeadlines();
 
         DataModel dataModel = statistics.printStatistics(this.groups, 3);
-
-        for (generation = 1; generation <= parameters.getNumGenerations(); generation++) {
+        dataModel.increaseGeneration();
+        for (; dataModel.getGeneration() <= parameters.getNumGenerations(); dataModel.increaseGeneration()) {
 
 
         }

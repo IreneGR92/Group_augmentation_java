@@ -2,8 +2,9 @@ package org.groupaugmentation;
 
 import ch.qos.logback.classic.Logger;
 import lombok.extern.slf4j.Slf4j;
-import org.groupaugmentation.Group;
 import org.groupaugmentation.model.DataModel;
+import org.groupaugmentation.model.types.GeneType;
+import org.groupaugmentation.model.types.PhenoTypes;
 import org.groupaugmentation.util.LoggerUtils;
 import org.groupaugmentation.util.Parameters;
 
@@ -42,6 +43,7 @@ public final class Statistics {
 
         this.resultsFileLogger.info(headlineResultsFile);
         this.lastGenerationLogger.info(headlineLastGenerationFile);
+        log.info(headlineResultsFile);
     }
 
     public void printParameters() {
@@ -85,11 +87,52 @@ public final class Statistics {
     }
 
     public DataModel printStatistics(DataModel dataModel, final List<Group> groupList, int poulationSize) {
-
+        final String TAB = "\t";
 
         for (Group group : groupList) {
             dataModel.merge(group.getStatisticalSums());
         }
+
+
+        String line = dataModel.getGeneration() + TAB
+                + dataModel.getGroupSize().getSum() + TAB
+                + dataModel.getDeaths() + TAB
+                + dataModel.getFloatersGenerated() + TAB
+                + dataModel.getGroupSize().getMean() + TAB
+                + dataModel.getAgeStats().getMean() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.ALPHA).getMean() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE).getMean() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE2).getMean() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.BETA).getMean() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.BETA_AGE).getMean() + TAB
+                + dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getMean() + TAB
+                + dataModel.getCumulativeHelp().getMean() + TAB
+                + dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getMean() + TAB
+                + dataModel.getPhenotypeAttributes().get(PhenoTypes.SURVIVAL).getMean() + TAB
+                + dataModel.getRelatedness() + TAB
+                + dataModel.getGroupSize().getStandardDeviation() + TAB
+                + dataModel.getAgeStats().getStandardDeviation() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.ALPHA).getStandardDeviation() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE).getStandardDeviation() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.ALPHA_AGE2).getStandardDeviation() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.BETA).getStandardDeviation() + TAB
+                + dataModel.getGeneAttributes().get(GeneType.BETA_AGE).getStandardDeviation() + TAB
+                + dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getStandardDeviation() + TAB
+                + dataModel.getCumulativeHelp().getStandardDeviation() + TAB
+                + dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getStandardDeviation() + TAB
+                + dataModel.getPhenotypeAttributes().get(PhenoTypes.SURVIVAL).getStandardDeviation() + TAB
+                + Statistics.getCorrelation(dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getProductSum(),
+                dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getMean(),
+                dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getMean(),
+                dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getSumCounter()) + TAB
+                + 0 + TAB //TODO implement correlation between groupsize and cumulative help
+                + dataModel.getNewBreederFloater() + TAB
+                + dataModel.getNewBreederHelper() + TAB
+                + "inheritance";
+
+
+        this.resultsFileLogger.info(line);
+        log.info(line);
         return dataModel;
     }
 

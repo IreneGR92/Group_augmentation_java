@@ -49,7 +49,8 @@ public class Group {
         this.breederAlive = true;
 
         this.fecundity = Double.NaN;
-        this.realFecundity =  Double.NaN;;
+        this.realFecundity = Double.NaN;
+        ;
 
         this.helpers = new ArrayList<>();
 
@@ -59,20 +60,8 @@ public class Group {
         }
     }
 
-    private int getGroupSize() {
-        if (breederAlive) {
-            return this.getHelperSize() + 1;
-        } else {
-            return this.getHelperSize();
-        }
-    }
-
-    public int getHelperSize() {
-        return this.helpers.size();
-    }
 
     public DataModel getStatisticalSums() {
-        log.debug("calculating statistical sums");
 
         List<Individual> individuals = new ArrayList<>(helpers);
 
@@ -88,11 +77,13 @@ public class Group {
 
 
         DataModel model = new DataModel();
-        model.setPopulationSize(this.getGroupSize());
+
         model.setAgeStats(age);
+        model.setGroupSize(this.calculateGroupSize());
         model.setDriftStats(driftStats);
         model.setGeneAttributes(geneAttributes);
         model.setPhenotypeAttributes(phenotypeAttributes);
+        model.setCumulativeHelp(this.calculateCumulativeHelp(model.getPhenotypeAttributes().get(PhenoTypes.HELP).getSum()));
         return model;
     }
 
@@ -104,17 +95,16 @@ public class Group {
 
         for (Individual individual : helpers) {
             drift = individual.getGenes().get(GeneType.DRIFT);
-            driftH.addToSum(drift);
+            driftH.addSum(drift);
         }
 
         StatisticalSum driftB = new StatisticalSum();
-        driftB.addToSum(driftBreeder);
+        driftB.addSum(driftBreeder);
 
         StatisticalSum driftBH = new StatisticalSum();
-        driftBH.addToSumOfSquare(driftH.getSum(), driftB.getSum());
+        driftBH.addToProduct(driftH.getSum(), driftB.getSum());
 
         StatisticalSum driftBB = new StatisticalSum();
-        driftBB.addToSumOfSquare(driftB.getSum());
 
         Map<DriftType, StatisticalSum> driftAttributes = new HashMap<>();
         driftAttributes.put(DriftType.H, driftH);
@@ -129,8 +119,7 @@ public class Group {
 
         StatisticalSum age = new StatisticalSum();
         for (Individual individual : individuals) {
-            age.addToSum(individual.getAge());
-            age.addToSumOfSquare(individual.getAge());
+            age.addSum(individual.getAge());
         }
         return age;
     }
@@ -149,13 +138,11 @@ public class Group {
                 double geneValue = individual.getGenes().get(geneType);
 
                 if (GeneType.DRIFT != geneType) {
-                    statsAttributes.addToSum(geneValue);
-                    statsAttributes.addToSumOfSquare(geneValue);
+                    statsAttributes.addSum(geneValue);
                 }
 
                 if (breederAlive && individual.getFishType() == FishType.HELPER) {
-                    statsAttributes.addToSum(geneValue);
-                    statsAttributes.addToSumOfSquare(geneValue);
+                    statsAttributes.addSum(geneValue);
                 }
 
                 geneAttributes.put(geneType, statsAttributes);
@@ -174,19 +161,16 @@ public class Group {
         for (Individual individual : individuals) {
 
             if (individual.getFishType() == FishType.HELPER) {
-                dispersal.addToSum(individual.getDispersal());
-                dispersal.addToSumOfSquare(individual.getDispersal());
+                dispersal.addSum(individual.getDispersal());
 
                 if (individual.isExpressHelp()) {
-                    help.addToSum(individual.getHelp());
-                    help.addToSumOfSquare(individual.getHelp());
+                    help.addSum(individual.getHelp());
 
-                    helpDispersalProduct.addToSumOfSquare(individual.getHelp(), individual.getDispersal());
+                    helpDispersalProduct.addToProduct(individual.getHelp(), individual.getDispersal());
 
                 }
             }
-            survival.addToSum(individual.getSurvival());
-            survival.addToSumOfSquare(individual.getSurvival());
+            survival.addSum(individual.getSurvival());
         }
 
 
@@ -199,5 +183,23 @@ public class Group {
         return phenoTypeMap;
     }
 
+    private StatisticalSum calculateGroupSize() {
+
+        StatisticalSum statisticalSum = new StatisticalSum();
+        int groupSize;
+        if (breederAlive) {
+            groupSize = this.helpers.size() + 1;
+        } else {
+            groupSize = this.helpers.size();
+        }
+        statisticalSum.addSum(groupSize);
+        return statisticalSum;
+    }
+
+    private StatisticalSum calculateCumulativeHelp(double sumOfGroupHelp) {
+        StatisticalSum statisticalSum = new StatisticalSum();
+        statisticalSum.addSum(sumOfGroupHelp);
+        return statisticalSum;
+    }
 
 }

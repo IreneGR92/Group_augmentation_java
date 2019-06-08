@@ -11,8 +11,20 @@ import java.util.Map;
 @Data
 public final class DataModel {
 
+    private int generation = 0;
 
-    private int populationSize = 0;
+    private int deaths = 0;
+
+    private int floatersGenerated = 0;
+
+    private int newBreederFloater = 0;
+
+    private int newBreederHelper = 0;
+
+
+    private StatisticalSum groupSize = new StatisticalSum();
+
+    private StatisticalSum cumulativeHelp = new StatisticalSum();
 
     private StatisticalSum ageStats = new StatisticalSum();
 
@@ -32,11 +44,12 @@ public final class DataModel {
     }
 
 
-
     public DataModel merge(DataModel toMerge) {
 
-        this.populationSize += toMerge.getPopulationSize();
+        this.groupSize.merge(toMerge.getGroupSize());
         this.ageStats.merge(toMerge.getAgeStats());
+        this.groupSize.merge(toMerge.getGroupSize());
+        this.cumulativeHelp.merge(toMerge.getCumulativeHelp());
 
         //merge drift
         toMerge.getDriftStats().forEach((geneType, statsSum) -> {
@@ -69,6 +82,18 @@ public final class DataModel {
         });
 
         return this;
+    }
+
+    public void increaseGeneration() {
+        this.generation++;
+    }
+
+    public void increaseDeath() {
+        this.deaths++;
+    }
+
+    public void increaseFloatersInmplemented() {
+
     }
 
 }

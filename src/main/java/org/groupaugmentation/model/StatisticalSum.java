@@ -13,6 +13,9 @@ public class StatisticalSum {
 
     protected double sumOfSquares = 0;
 
+    //optional
+    protected double productSum = 0;
+
 
     public double getMean() {
         return this.sum / this.sumCounter;
@@ -30,23 +33,22 @@ public class StatisticalSum {
         return Math.sqrt(variance);
     }
 
-    public void addToSum(double toAdd) {
+    public void addSum(double toAdd) {
+        this.sumOfSquares += Math.pow(toAdd, 2);
         this.sum += toAdd;
         this.sumCounter++;
     }
 
-    public void addToSumOfSquare(double a) {
-        this.sumOfSquares += Math.pow(a, 2);
-    }
 
-    public void addToSumOfSquare(double a, double b) {
-        this.sumOfSquares += a * b;
+    public void addToProduct(double a, double b) {
+        this.productSum += a * b;
     }
 
     public StatisticalSum merge(StatisticalSum statisticalSum) {
         this.sum += statisticalSum.getSum();
         this.sumOfSquares += statisticalSum.getSumOfSquares();
         this.sumCounter += statisticalSum.sumCounter;
+        this.productSum += statisticalSum.getProductSum();
         return this;
     }
 }

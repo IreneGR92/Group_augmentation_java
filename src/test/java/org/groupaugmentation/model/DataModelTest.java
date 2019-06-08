@@ -18,7 +18,7 @@ public class DataModelTest {
         DataModel dataModel = new DataModel();
         Map<GeneType, StatisticalSum> geneStats = new HashMap<>();
         StatisticalSum beta = new StatisticalSum();
-        beta.addToSum(5);
+        beta.addSum(5);
         geneStats.put(GeneType.BETA, beta);
         dataModel.setGeneAttributes(geneStats);
 
@@ -26,7 +26,7 @@ public class DataModelTest {
         DataModel dataModelToMerge = new DataModel();
         Map<GeneType, StatisticalSum> geneStatsToMerge = new HashMap<>();
         StatisticalSum betaToMerge = new StatisticalSum();
-        betaToMerge.addToSum(6);
+        betaToMerge.addSum(6);
         geneStatsToMerge.put(GeneType.BETA, betaToMerge);
         geneStatsToMerge.put(GeneType.ALPHA, betaToMerge);
         dataModelToMerge.setGeneAttributes(geneStatsToMerge);
