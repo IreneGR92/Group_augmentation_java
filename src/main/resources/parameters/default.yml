@@ -1,0 +1,59 @@
+#Apply reaction norm to ageStats for level of help?
+reactionNormDispersal: false
+reactionNormHelp: false
+#max number of groups or colonies --> breeding spots.
+maxColonies: 5000
+numGenerations: 100000
+maxNumReplicates: 20
+#interval between print-outs
+skip: 50
+
+##fix values
+#initial number of helpers per group
+initNumberOfHelpers: 3
+#mean of number of groups a floater can visit to try to become a breeder compared to 1 group for helpers
+biasFloadBreeder: 2
+
+##Modifiers in survival. X0 + Xsn - Xsh =< 1
+#base survival without the effect of help or group size
+x0: 0.7
+#cost of help in survival
+xsh: 0.4
+#benefit of group size in survival
+xsn: 0.4
+
+## Modifiers in fecundity
+k0: 1 #min fecundity, fecundity when no help provided.
+k1: 1 #benefit of cumhelp in the fecundity
+
+## for help
+#bigger values higher level of help
+initAlpha: 0.5
+#linear term for ageStats, positive: higher help with ageStats
+initAlphaAge: 0
+
+##Generic values
+#quadratic term for ageStats, positive: higher help with ageStats
+initAlphaAge2: 0
+#mutation rate in alpha for level of help
+mutationAlpha: 0
+mutationAlphaAge: 0.05
+mutationAlphaAge2: 0.05
+#mutation step size in alpha for level of help
+stepAlpha: 0.04
+
+##for dispersal
+#bigger values higher dispersal
+initBeta: 0.5
+#0: ageStats has no effect, positive: dispersal decreases with ageStats
+initBetaAge: 0
+#mutation rate for the propensity to disperse
+mutationBeta: 0
+mutationBetaAge: 0.05
+#mutation step size for the propensity to disperse
+stepBeta: 0.04
+
+##for relatedness
+#mutation rate in the neutral selected value to track level of relatedness
+mutationDrift: 0.05
+stepDrift: 0.04
