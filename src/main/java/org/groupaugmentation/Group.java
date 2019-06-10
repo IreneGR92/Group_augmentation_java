@@ -27,6 +27,10 @@ import java.util.Map;
 @Slf4j
 public class Group {
 
+    private final Parameters parameters;
+
+    private final RandomNumberGenerator randomNumberGenerator;
+
     private boolean breederAlive;
 
     private double fecundity;
@@ -46,7 +50,8 @@ public class Group {
         genes.put(GeneType.ALPHA_AGE2, parameters.getInitAlphaAge2());
         genes.put(GeneType.BETA, parameters.getInitBeta());
         genes.put(GeneType.BETA_AGE, parameters.getInitBetaAge());
-
+        this.parameters = parameters;
+        this.randomNumberGenerator = randomNumberGenerator;
         this.breeder = new Breeder(genes);
         this.breederAlive = true;
 
@@ -92,7 +97,14 @@ public class Group {
     public List<Floater> disperse() {
         List<Floater> floaters = new ArrayList<>();
 
-
+        for (Helper helper : helpers) {
+            helper.setDispersal(helper.calculateDispersal(parameters.isReactionNormDispersal()));
+            if (helper.getDispersal() > randomNumberGenerator.getNextRealUniform()) {
+                this.helpers.remove(helper);
+                Floater floater = new Floater(helper);
+                floaters.add(floater);
+            }
+        }
         return floaters;
     }
 

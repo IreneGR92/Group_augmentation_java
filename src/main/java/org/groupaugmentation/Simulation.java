@@ -39,8 +39,16 @@ public class Simulation {
         statistics.printHeadlines();
 
         DataModel dataModel = statistics.printStatistics(this.groups);
+
         dataModel.increaseGeneration();
         for (; dataModel.getGeneration() <= parameters.getNumGenerations(); dataModel.increaseGeneration()) {
+
+            for (Group group : groups) {
+                this.floaters.addAll(group.disperse());
+
+
+
+            }
 
 
         }
