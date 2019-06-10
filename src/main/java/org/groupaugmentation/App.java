@@ -8,6 +8,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;
 
 @Slf4j
+//TODO catch arithmetic exception for all the possible fails
 public class App {
 
 

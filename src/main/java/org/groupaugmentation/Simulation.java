@@ -34,7 +34,7 @@ public class Simulation {
     }
 
     public void simulate() {
-        log.trace("simulate()");
+        log.trace("calculateHelp()");
         statistics.printParameters();
         statistics.printHeadlines();
 
@@ -45,10 +45,16 @@ public class Simulation {
 
             for (Group group : groups) {
                 this.floaters.addAll(group.disperse());
-
-
-
             }
+
+            for (Group group : groups) {
+                group.calculateCumulativeHelp();
+            }
+
+            for (Group group : groups) {
+                dataModel.setDeaths(dataModel.getDeaths() + group.groupSurvival());
+            }
+            dataModel.setDeaths(dataModel.getDeaths() + this.floaterSurvival());
 
 
         }
@@ -67,5 +73,24 @@ public class Simulation {
         return groups;
     }
 
+
+    private int floaterSurvival() {
+
+        int deaths = 0;
+        //calculate survival
+        for (Floater floater : floaters) {
+            floater.calculateSurvival(parameters, 0);
+        }
+
+        //kill them
+        for (Floater floater : floaters) {
+            if (randomNumberGenerator.getNextRealUniform() > floater.getSurvival()) {
+                floaters.remove(floater);
+                deaths++;
+
+            }
+        }
+        return deaths;
+    }
 
 }

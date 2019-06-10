@@ -15,6 +15,8 @@ public final class Parameters {
 
     private boolean reactionNormHelp;
 
+    private boolean oldSurvivalFormula;
+
     private int maxColonies;
 
     private int numGenerations;

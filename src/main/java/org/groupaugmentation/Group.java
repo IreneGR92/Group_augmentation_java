@@ -35,6 +35,8 @@ public class Group {
 
     private double fecundity;
 
+    private double cumulativeHelp;
+
     private double realFecundity;
 
     private Breeder breeder;
@@ -57,7 +59,7 @@ public class Group {
 
         this.fecundity = Double.NaN;
         this.realFecundity = Double.NaN;
-        ;
+
 
         this.helpers = new ArrayList<>();
 
@@ -67,6 +69,43 @@ public class Group {
         }
     }
 
+
+    public void calculateCumulativeHelp() {
+
+        for (Helper helper : helpers) {
+            helper.setHelp(helper.calculateHelp(parameters.isReactionNormHelp()));
+            this.cumulativeHelp += helper.getHelp();
+        }
+
+    }
+
+    public int groupSurvival() {
+
+        int deaths = 0;
+
+        //calculate survival
+        for (Helper helper : helpers) {
+            helper.calculateSurvival(this.parameters, helpers.size());
+        }
+        breeder.calculateSurvival(this.parameters, helpers.size());
+
+        //kill them
+        for (Helper helper : this.helpers) {
+
+            if (randomNumberGenerator.getNextRealUniform() > helper.getSurvival()) {
+                this.helpers.remove(helper);
+                deaths++;
+            }
+        }
+
+        if (randomNumberGenerator.getNextRealUniform() > breeder.getSurvival()) {
+            this.breederAlive = false;
+            this.breeder = null;
+            deaths++;
+
+        }
+        return deaths;
+    }
 
     public DataModel getDataModel() {
 
@@ -189,12 +228,12 @@ public class Group {
         for (Individual individual : individuals) {
 
             if (individual instanceof Helper) {
-                dispersal.addSum(individual.getDispersal());
+                dispersal.addSum(((Helper) individual).getDispersal());
 
                 if (individual.isExpressHelp()) {
-                    help.addSum(individual.getHelp());
+                    help.addSum(((Helper) individual).getHelp());
 
-                    helpDispersalProduct.addSum(individual.getHelp() * individual.getDispersal());
+                    helpDispersalProduct.addSum(((Helper) individual).getHelp() * ((Helper) individual).getDispersal());
 
                 }
             }

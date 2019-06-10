@@ -1,6 +1,7 @@
 #Apply reaction norm to ageStats for level of help?
 reactionNormDispersal: false
 reactionNormHelp: false
+oldSurvivalFormula: false
 #max number of groups or colonies --> breeding spots.
 maxColonies: 5000
 numGenerations: 100000
