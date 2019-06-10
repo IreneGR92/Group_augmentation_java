@@ -28,6 +28,8 @@ public final class DataModel {
 
     private StatisticalSum ageStats = new StatisticalSum();
 
+    private StatisticalSum driftBH = new StatisticalSum();
+
     private Map<DriftType, StatisticalSum> driftStats = new HashMap<>();
 
     private Map<GeneType, StatisticalSum> geneAttributes = new HashMap<>();
@@ -37,7 +39,7 @@ public final class DataModel {
 
     public double getRelatedness() {
 
-        double upper = this.driftStats.get(DriftType.BH).getMean() - this.driftStats.get(DriftType.B).getMean() * this.driftStats.get(DriftType.H).getMean();
+        double upper = this.driftBH.getMean() - this.driftStats.get(DriftType.B).getMean() * this.driftStats.get(DriftType.H).getMean();
         double lower = driftStats.get(DriftType.BB).getMean() - Math.pow(driftStats.get(DriftType.B).getMean(), 2);
 
         return lower == 0 ? 2 : upper / lower;
@@ -45,6 +47,12 @@ public final class DataModel {
 
 
     public DataModel merge(DataModel toMerge) {
+        this.generation += toMerge.getGeneration();
+        this.deaths += toMerge.getDeaths();
+        this.floatersGenerated += toMerge.getFloatersGenerated();
+        this.newBreederFloater += toMerge.getNewBreederFloater();
+        this.driftBH.addSum(toMerge.getDriftStats().get(DriftType.BH).getMean());
+
 
         this.groupSize.merge(toMerge.getGroupSize());
         this.ageStats.merge(toMerge.getAgeStats());

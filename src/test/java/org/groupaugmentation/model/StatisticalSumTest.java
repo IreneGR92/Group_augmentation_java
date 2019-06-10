@@ -27,10 +27,10 @@ class StatisticalSumTest {
 
         assertEquals(6, toMerge.getSum());
         assertEquals(2, toMerge.getSumCounter());
-        assertEquals(5, toMerge.getSumOfSquares());
+        assertEquals(20, toMerge.getSumOfSquares());
 
         assertEquals(4, toMergeWith.getSum());
-        assertEquals(4, toMergeWith.getSumOfSquares());
+        assertEquals(16, toMergeWith.getSumOfSquares());
         assertEquals(1, toMergeWith.getSumCounter());
 
     }
@@ -46,7 +46,7 @@ class StatisticalSumTest {
         assertNotNull(instanceToTest);
         assertEquals(5, instanceToTest.getSum());
         assertEquals(2, instanceToTest.getSumCounter());
-        assertEquals(0, instanceToTest.getSumOfSquares());
+        assertEquals(13, instanceToTest.getSumOfSquares());
     }
 
 }

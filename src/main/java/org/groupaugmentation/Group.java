@@ -93,16 +93,20 @@ public class Group {
 
         StatisticalSum driftH = new StatisticalSum();
 
+        StatisticalSum driftBH = new StatisticalSum();
+
+
+
         for (Individual individual : helpers) {
             drift = individual.getGenes().get(GeneType.DRIFT);
             driftH.addSum(drift);
+
+            driftBH.addSum(drift * driftBreeder);
         }
 
         StatisticalSum driftB = new StatisticalSum();
         driftB.addSum(driftBreeder);
 
-        StatisticalSum driftBH = new StatisticalSum();
-        driftBH.addSum(driftH.getSum() * driftB.getSum());
 
         StatisticalSum driftBB = new StatisticalSum();
 

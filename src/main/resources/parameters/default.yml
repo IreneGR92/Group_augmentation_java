@@ -2,7 +2,7 @@
 reactionNormDispersal: false
 reactionNormHelp: false
 #max number of groups or colonies --> breeding spots.
-maxColonies: 2
+maxColonies: 5000
 numGenerations: 100000
 maxNumReplicates: 20
 #interval between print-outs
