@@ -87,6 +87,11 @@ public class Group {
         return model;
     }
 
+    public void disperse() {
+
+    }
+
+
     private Map<DriftType, StatisticalSum> calculateDriftTypeAttributes(List<Individual> helpers, double driftBreeder) {
 
         double drift;
@@ -94,7 +99,6 @@ public class Group {
         StatisticalSum driftH = new StatisticalSum();
 
         StatisticalSum driftBH = new StatisticalSum();
-
 
 
         for (Individual individual : helpers) {
@@ -111,7 +115,6 @@ public class Group {
         StatisticalSum driftBB = new StatisticalSum();
 
         driftBB.addSum(driftBreeder * driftBreeder);
-
 
 
         Map<DriftType, StatisticalSum> driftAttributes = new HashMap<>();

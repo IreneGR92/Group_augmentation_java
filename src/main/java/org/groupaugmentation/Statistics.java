@@ -100,9 +100,9 @@ public final class Statistics {
 
 
         String line = dataModel.getGeneration() + TAB
-                + dataModel.getGroupSize().getSum() + TAB
-                + dataModel.getDeaths() + TAB
-                + dataModel.getFloatersGenerated() + TAB
+                + formatDouble(dataModel.getGroupSize().getSum(), 0) + TAB
+                + formatDouble(dataModel.getDeaths(), 0) + TAB
+                + formatDouble(dataModel.getFloatersGenerated(), 0) + TAB
                 + formatDouble(dataModel.getGroupSize().getMean()) + TAB
                 + formatDouble(dataModel.getAgeStats().getMean()) + TAB
                 + formatDouble(dataModel.getGeneAttributes().get(GeneType.ALPHA).getMean()) + TAB
@@ -144,10 +144,13 @@ public final class Statistics {
         return dataModel;
     }
 
+    private String formatDouble(double toFormat, int precision) {
+        return String.format("%.0" + precision + "f", DoubleRounder.round(toFormat, precision));
+    }
 
     private String formatDouble(double toFormat) {
         final int precision = 4;
-        return String.format("%.0" + precision + "f", DoubleRounder.round(toFormat, precision));
+        return this.formatDouble(toFormat, precision);
     }
 }
 

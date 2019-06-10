@@ -56,7 +56,6 @@ public final class DataModel {
 
         this.groupSize.merge(toMerge.getGroupSize());
         this.ageStats.merge(toMerge.getAgeStats());
-        this.groupSize.merge(toMerge.getGroupSize());
         this.cumulativeHelp.merge(toMerge.getCumulativeHelp());
 
         //merge drift
