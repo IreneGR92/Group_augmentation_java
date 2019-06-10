@@ -1,5 +1,6 @@
 package org.groupaugmentation.model;
 
+import org.groupaugmentation.model.types.DriftType;
 import org.groupaugmentation.model.types.GeneType;
 import org.junit.jupiter.api.Test;
 
@@ -29,15 +30,13 @@ public class DataModelTest {
         geneStats.put(GeneType.BETA, beta);
         dataModel.setGeneAttributes(geneStats);
 
-
         DataModel dataModelToMerge = new DataModel();
         Map<GeneType, StatisticalSum> geneStatsToMerge = new HashMap<>();
-        StatisticalSum betaToMerge = new StatisticalSum();
-        betaToMerge.addSum(6);
-        geneStatsToMerge.put(GeneType.BETA, betaToMerge);
-        geneStatsToMerge.put(GeneType.ALPHA, betaToMerge);
         dataModelToMerge.setGeneAttributes(geneStatsToMerge);
+        Map<DriftType, StatisticalSum> driftStatsToMerge = new HashMap<>();
+        driftStatsToMerge.put(DriftType.BH, new StatisticalSum());
 
+        dataModelToMerge.setDriftStats(driftStatsToMerge);
         dataModelToMerge.increaseGeneration();
         dataModelToMerge.increaseDeath();
         dataModelToMerge.setFloatersGenerated(1);

@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.groupaugmentation.model.DataModel;
-import org.groupaugmentation.model.Individual;
 import org.groupaugmentation.model.StatisticalSum;
+import org.groupaugmentation.model.fishtype.Breeder;
+import org.groupaugmentation.model.fishtype.Floater;
+import org.groupaugmentation.model.fishtype.Helper;
+import org.groupaugmentation.model.fishtype.Individual;
 import org.groupaugmentation.model.types.DriftType;
-import org.groupaugmentation.model.types.FishType;
 import org.groupaugmentation.model.types.GeneType;
 import org.groupaugmentation.model.types.PhenoTypes;
 import org.groupaugmentation.util.Parameters;
@@ -31,9 +33,9 @@ public class Group {
 
     private double realFecundity;
 
-    private Individual breeder;
+    private Breeder breeder;
 
-    private List<Individual> helpers;
+    private List<Helper> helpers;
 
     public Group(Parameters parameters, RandomNumberGenerator randomNumberGenerator) {
 
@@ -45,7 +47,7 @@ public class Group {
         genes.put(GeneType.BETA, parameters.getInitBeta());
         genes.put(GeneType.BETA_AGE, parameters.getInitBetaAge());
 
-        this.breeder = new Individual(genes, FishType.BREEDER);
+        this.breeder = new Breeder(genes);
         this.breederAlive = true;
 
         this.fecundity = Double.NaN;
@@ -55,25 +57,25 @@ public class Group {
         this.helpers = new ArrayList<>();
 
         for (int i = 0; i < parameters.getInitNumberOfHelpers(); i++) {
-            Individual individual = new Individual(genes, FishType.HELPER);
-            helpers.add(individual);
+            Helper helper = new Helper(genes);
+            helpers.add(helper);
         }
     }
 
 
     public DataModel getDataModel() {
 
-        List<Individual> individuals = new ArrayList<>(helpers);
+        List<Individual> helpersAndBreeder = new ArrayList<>(this.helpers);
 
-        Map<DriftType, StatisticalSum> driftStats = this.calculateDriftTypeAttributes(individuals, this.breeder.getGenes().get(GeneType.DRIFT));
+        Map<DriftType, StatisticalSum> driftStats = this.calculateDriftTypeAttributes(helpersAndBreeder, this.breeder.getGenes().get(GeneType.DRIFT));
 
         if (breederAlive) {
-            individuals.add(this.breeder);
+            helpersAndBreeder.add(this.breeder);
         }
 
-        StatisticalSum age = this.calculateAge(individuals);
-        Map<GeneType, StatisticalSum> geneAttributes = this.calculateGeneAttributes(individuals);
-        Map<PhenoTypes, StatisticalSum> phenotypeAttributes = this.calculatePhenoTypes(individuals);
+        StatisticalSum age = this.calculateAge(helpersAndBreeder);
+        Map<GeneType, StatisticalSum> geneAttributes = this.calculateGeneAttributes(helpersAndBreeder);
+        Map<PhenoTypes, StatisticalSum> phenotypeAttributes = this.calculatePhenoTypes(helpersAndBreeder);
 
 
         DataModel model = new DataModel();
@@ -87,8 +89,11 @@ public class Group {
         return model;
     }
 
-    public void disperse() {
+    public List<Floater> disperse() {
+        List<Floater> floaters = new ArrayList<>();
 
+
+        return floaters;
     }
 
 
@@ -152,7 +157,7 @@ public class Group {
                     statsAttributes.addSum(geneValue);
                 }
 
-                if (breederAlive && individual.getFishType() == FishType.HELPER) {
+                if (breederAlive && individual instanceof Helper) {
                     statsAttributes.addSum(geneValue);
                 }
 
@@ -171,7 +176,7 @@ public class Group {
 
         for (Individual individual : individuals) {
 
-            if (individual.getFishType() == FishType.HELPER) {
+            if (individual instanceof Helper) {
                 dispersal.addSum(individual.getDispersal());
 
                 if (individual.isExpressHelp()) {

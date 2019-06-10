@@ -1,6 +1,6 @@
 package org.groupaugmentation.model;
 
-import org.groupaugmentation.model.types.FishType;
+import org.groupaugmentation.model.fishtype.Helper;
 import org.groupaugmentation.model.types.GeneType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IndividualTest {
+public class HelperTest {
 
     private Map<GeneType, Double> genes;
 
@@ -24,10 +24,10 @@ public class IndividualTest {
     @Test
     void calculateDispersalTest() {
         //given
-        Individual individual = new Individual(this.genes, FishType.HELPER);
-        individual.setAge(10);
+        Helper helper = new Helper(this.genes);
+        helper.setAge(10);
         //then
-        double result = individual.calculateDispersal(true);
+        double result = helper.calculateDispersal(true);
 
         //then
         assertEquals(3.059022269256247E-7, result);
@@ -37,10 +37,10 @@ public class IndividualTest {
     void calculateDispersalReactNormFalseTest() {
         //given
         genes.put(GeneType.BETA, 1d);
-        Individual individual = new Individual(this.genes, FishType.HELPER);
-        individual.setAge(10);
+        Helper helper = new Helper(this.genes);
+        helper.setAge(10);
         //then
-        double result = individual.calculateDispersal(false);
+        double result = helper.calculateDispersal(false);
 
         //then
         assertEquals(1d, result);

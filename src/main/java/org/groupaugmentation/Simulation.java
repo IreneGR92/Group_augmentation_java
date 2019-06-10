@@ -2,7 +2,7 @@ package org.groupaugmentation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.groupaugmentation.model.DataModel;
-import org.groupaugmentation.model.Individual;
+import org.groupaugmentation.model.fishtype.Floater;
 import org.groupaugmentation.util.Parameters;
 import org.groupaugmentation.util.RandomNumberGenerator;
 
@@ -21,7 +21,7 @@ public class Simulation {
     private final RandomNumberGenerator randomNumberGenerator;
 
 
-    private List<Individual> floaters;
+    private List<Floater> floaters;
 
     private List<Group> groups;
 
