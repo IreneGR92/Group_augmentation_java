@@ -13,10 +13,6 @@ public class StatisticalSum {
 
     protected double sumOfSquares = 0;
 
-    //optional
-    protected double productSum = 0;
-
-
     public double getMean() {
         return this.sum / this.sumCounter;
     }
@@ -40,15 +36,10 @@ public class StatisticalSum {
     }
 
 
-    public void addToProduct(double a, double b) {
-        this.productSum += a * b;
-    }
-
     public StatisticalSum merge(StatisticalSum statisticalSum) {
         this.sum += statisticalSum.getSum();
         this.sumOfSquares += statisticalSum.getSumOfSquares();
         this.sumCounter += statisticalSum.sumCounter;
-        this.productSum += statisticalSum.getProductSum();
         return this;
     }
 }

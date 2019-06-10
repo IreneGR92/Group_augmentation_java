@@ -83,15 +83,19 @@ public final class Statistics {
 
     }
 
-    public DataModel printStatistics(final List<Group> groupList, int poulationSize) {
-        return this.printStatistics(new DataModel(), groupList, poulationSize);
+    /**
+     * In case no DataModel exists yet use this function.
+     */
+    public DataModel printStatistics(final List<Group> groupList) {
+        return this.printStatistics(new DataModel(), groupList);
     }
 
-    public DataModel printStatistics(DataModel dataModel, final List<Group> groupList, int poulationSize) {
+    public DataModel printStatistics(DataModel dataModel, final List<Group> groupList) {
+
         final String TAB = "\t";
 
         for (Group group : groupList) {
-            dataModel.merge(group.getStatisticalSums());
+            dataModel.merge(group.getDataModel());
         }
 
 
@@ -124,7 +128,7 @@ public final class Statistics {
                 + formatDouble(dataModel.getPhenotypeAttributes().get(PhenoTypes.SURVIVAL).getStandardDeviation()) + TAB
 
                 + formatDouble(
-                Statistics.getCorrelation(dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getProductSum(),
+                Statistics.getCorrelation(dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getSum(),
                         dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP).getMean(),
                         dataModel.getPhenotypeAttributes().get(PhenoTypes.DISPERSAL).getMean(),
                         dataModel.getPhenotypeAttributes().get(PhenoTypes.HELP_DISPERSAL_PRODUCT).getSumCounter())

@@ -1,6 +1,5 @@
 package org.groupaugmentation;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.groupaugmentation.model.DataModel;
 import org.groupaugmentation.model.Individual;
@@ -22,19 +21,6 @@ public class Simulation {
     private final RandomNumberGenerator randomNumberGenerator;
 
 
-    @Getter
-    private int populationSizeBeforeSurvival = 0;
-
-
-    @Getter
-    private int newBreederFloater = 0;
-
-    @Getter
-    private int newBreederHelper = 0;
-
-    @Getter
-    private int inheritance = 0;
-
     private List<Individual> floaters;
 
     private List<Group> groups;
@@ -44,6 +30,7 @@ public class Simulation {
         this.statistics = new Statistics(parameters);
         this.randomNumberGenerator = new RandomNumberGenerator(parameters);
         this.groups = this.initGroups();
+        this.floaters = new ArrayList<>();
     }
 
     public void simulate() {
@@ -51,7 +38,7 @@ public class Simulation {
         statistics.printParameters();
         statistics.printHeadlines();
 
-        DataModel dataModel = statistics.printStatistics(this.groups, 3);
+        DataModel dataModel = statistics.printStatistics(this.groups);
         dataModel.increaseGeneration();
         for (; dataModel.getGeneration() <= parameters.getNumGenerations(); dataModel.increaseGeneration()) {
 

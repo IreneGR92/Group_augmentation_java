@@ -53,7 +53,7 @@ public final class DataModel {
 
         //merge drift
         toMerge.getDriftStats().forEach((geneType, statsSum) -> {
-            StatisticalSum stats = this.geneAttributes.get(geneType);
+            StatisticalSum stats = this.driftStats.get(geneType);
             if (stats == null) {
                 this.getDriftStats().put(geneType, statsSum);
             } else {

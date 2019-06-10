@@ -61,7 +61,7 @@ public class Group {
     }
 
 
-    public DataModel getStatisticalSums() {
+    public DataModel getDataModel() {
 
         List<Individual> individuals = new ArrayList<>(helpers);
 
@@ -102,9 +102,13 @@ public class Group {
         driftB.addSum(driftBreeder);
 
         StatisticalSum driftBH = new StatisticalSum();
-        driftBH.addToProduct(driftH.getSum(), driftB.getSum());
+        driftBH.addSum(driftH.getSum() * driftB.getSum());
 
         StatisticalSum driftBB = new StatisticalSum();
+
+        driftBB.addSum(driftBreeder * driftBreeder);
+
+
 
         Map<DriftType, StatisticalSum> driftAttributes = new HashMap<>();
         driftAttributes.put(DriftType.H, driftH);
@@ -166,7 +170,7 @@ public class Group {
                 if (individual.isExpressHelp()) {
                     help.addSum(individual.getHelp());
 
-                    helpDispersalProduct.addToProduct(individual.getHelp(), individual.getDispersal());
+                    helpDispersalProduct.addSum(individual.getHelp() * individual.getDispersal());
 
                 }
             }
